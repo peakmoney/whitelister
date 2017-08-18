@@ -1,6 +1,7 @@
 /* eslint-env node, mocha */
 
-const whitelister = require('../whitelister');
+const whitelister = require('../lib/whitelister');
+const { ArgumentError, WhitelistError } = require('../lib/errors');
 
 const { expect } = require('chai');
 
@@ -13,31 +14,30 @@ describe('Whitelister', () => {
 
   describe('basic errors', () => {
     it('should require rules as an argument', (done) => {
-      expect(() => whitelister()).to.throw(/Validation/);
+      expect(() => whitelister()).to.throw(ArgumentError, 'rules is not an object');
       done();
     });
 
     it('should require rules (an object) as first argument', (done) => {
-      expect(() => whitelister('rules')).to.throw(/Validation/);
+      expect(() => whitelister('rules')).to.throw(ArgumentError, 'rules is not an object');
       done();
     });
 
     it('should require params as a second argument', (done) => {
-      expect(() => whitelister({})).to.throw(/Validation/);
+      expect(() => whitelister({})).to.throw(ArgumentError, 'params is not an object');
       done();
     });
 
     it('should require params (an object) as a second argument', (done) => {
-      expect(() => whitelister({}, 'params')).to.throw(/Validation/);
+      expect(() => whitelister({}, 'params')).to.throw(ArgumentError, 'params is not an object');
       done();
     });
   });
 
   describe('basic usage', () => {
-    const rules = {};
-    const params = {};
-
     it('should return an empty object when rules are empty', (done) => {
+      const rules = {};
+      const params = {};
       const response = whitelister(rules, params);
       expect(response).to.be.an('object');
       expect(Object.keys(response)).to.have.lengthOf(0);
@@ -45,7 +45,10 @@ describe('Whitelister', () => {
     });
 
     it('should return an empty object when params are empty', (done) => {
-      rules.name = 'string';
+      const rules = {
+        name: 'string',
+      };
+      const params = {};
       const response = whitelister(rules, params);
       expect(response).to.be.an('object');
       expect(Object.keys(response)).to.have.lengthOf(0);
@@ -53,7 +56,12 @@ describe('Whitelister', () => {
     });
 
     it('should return an empty object when params have non-whitelisted props', (done) => {
-      params.email = 'bob@email.com';
+      const rules = {
+        name: 'string',
+      };
+      const params = {
+        email: 'bob@email.com',
+      };
       const response = whitelister(rules, params);
       expect(response).to.be.an('object');
       expect(Object.keys(response)).to.have.lengthOf(0);
@@ -61,7 +69,13 @@ describe('Whitelister', () => {
     });
 
     it('should return an object with "name" prop', (done) => {
-      params.name = 'Bob Smith';
+      const rules = {
+        name: 'string',
+      };
+      const params = {
+        email: 'bob@email.com',
+        name: 'Bob Smith',
+      };
       const response = whitelister(rules, params);
       expect(response).to.be.an('object');
       expect(response).to.have.property('name', 'Bob Smith');
@@ -69,8 +83,19 @@ describe('Whitelister', () => {
     });
 
     it('should throw when missing required prop', (done) => {
-      rules.id = { type: 'integer', required: true };
-      expect(() => whitelister(rules, params)).to.throw(/Validation/);
+      const rules = {
+        name: 'string',
+        id: { type: 'integer', required: true },
+      };
+      const params = {
+        email: 'bob@email.com',
+        name: 'Bob Smith',
+      };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'id is required');
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError)
+        .with.property('whitelist')
+        .that.is.an('object')
+        .that.has.property('id', 'is required');
       done();
     });
   });

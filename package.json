@@ -20,13 +20,10 @@
   ],
   "license": "UNLICENSED",
   "dependencies": {
-    "bluebird": "^3.3.5",
     "debug": "^2.2.0",
-    "lodash": "^4.11.1",
     "moment": "^2.13.0"
   },
   "devDependencies": {
-    "apidoc": "^0.16.1",
     "babel-eslint": "^7.2.3",
     "chai": "^3.5.0",
     "eslint": "^4.4.1",
@@ -36,6 +33,5 @@
     "eslint-plugin-react": "^7.2.1",
     "mocha": "^2.4.5",
     "mocha-clean": "^1.0.0"
-  },
-  "snyk": true
+  }
 }
