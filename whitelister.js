@@ -6,8 +6,8 @@ const moment = require('moment');
 const toString = Object.prototype.toString;
 const has = Object.prototype.hasOwnProperty;
 const isDefined = obj => typeof obj !== 'undefined';
-const isString = obj => toString(obj) === '[object String]';
-const isObject = obj => toString(obj) === '[object Object]';
+const isString = obj => toString.call(obj) === '[object String]';
+const isObject = obj => toString.call(obj) === '[object Object]';
 const isNil = obj => !isDefined(obj) || obj === null;
 const includesOneOf = (expected, given) => {
   const [base, target] = expected.length < given.length ? [expected, given] : [given, expected];
@@ -47,6 +47,10 @@ const parseRelativeDate = (instructions, name) => {
 };
 
 function filterByRules(rules, params, parent) {
+  if (!isObject(rules)) {
+    throw new ValidationFailed('rules', 'is not an object');
+  }
+
   if (!isObject(params)) {
     throw new ValidationFailed(parent, 'is not an object');
   }
@@ -208,7 +212,7 @@ function filterByRules(rules, params, parent) {
 
         filteredParams[name] = val;
       }
-    } else if (!isDefined(opts.default)) {
+    } else if (isDefined(opts.default)) {
       filteredParams[name] = opts.default;
     } else if (opts.required) {
       throw new ValidationFailed(name, 'is required');
