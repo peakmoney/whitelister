@@ -6,9 +6,7 @@
   "repository": "git@github.com:SpireTeam/whitelister",
   "scripts": {
     "test": "NODE_ENV=test mocha --require mocha-clean --timeout=10000",
-    "lint": "eslint .",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "lint": "eslint ."
   },
   "contributors": [
     {
@@ -25,22 +23,19 @@
     "bluebird": "^3.3.5",
     "debug": "^2.2.0",
     "lodash": "^4.11.1",
-    "moment": "^2.13.0",
-    "snyk": "^1.30.1"
+    "moment": "^2.13.0"
   },
   "devDependencies": {
     "apidoc": "^0.16.1",
+    "babel-eslint": "^7.2.3",
     "chai": "^3.5.0",
-    "chai-http": "^2.0.1",
-    "eslint": "^2.9.0",
-    "eslint-config-airbnb": "^8.0.0",
-    "eslint-plugin-import": "^1.6.1",
-    "eslint-plugin-jsx-a11y": "^1.0.4",
-    "image-size": "^0.5.0",
+    "eslint": "^4.4.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.2.1",
     "mocha": "^2.4.5",
-    "mocha-clean": "^1.0.0",
-    "nodemailer-browserpreview-transport": "^0.1.6",
-    "nodemon": "^1.9.2"
+    "mocha-clean": "^1.0.0"
   },
   "snyk": true
 }
