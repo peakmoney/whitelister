@@ -357,10 +357,97 @@ describe('Whitelister', () => {
       expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'digits has too many elements (max 7 elements)');
       done();
     });
+
+    it('should accept a valid array of numbers', (done) => {
+      const rules = { digits: 'array' };
+      const params = { digits: [1, 2, 3] };
+      const response = whitelister(rules, params);
+      expect(response).to.be.an('object')
+        .that.has.property('digits')
+        .that.is.an('array')
+        .that.has.members([1, 2, 3]);
+      done();
+    });
+
+    // TODO: be able to validate what is inside the array when its not objects
+    it('should accept a valid array of numbers with attributes', (done) => {
+      const rules = {
+        digits: {
+          type: 'array',
+          attributes: {
+            type: 'integer',
+          },
+        },
+      };
+      const params = { digits: [1, 2, 3] };
+      const response = whitelister(rules, params);
+      expect(response).to.be.an('object')
+        .that.has.property('digits')
+        .that.is.an('array')
+        .that.has.members([1, 2, 3]);
+      done();
+    });
   });
 
   describe('type: object', () => {
+    it('should throw an error if value is a string "hello world"', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+        },
+      };
+      const params = { user: 'hello world' };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'user is not an object');
+      done();
+    });
 
+    it('should accept a valid object', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: 'integer',
+          },
+        },
+      };
+      const params = { user: { id: 1 } };
+      const response = whitelister(rules, params);
+      expect(response).to.be.an('object').that.has.property('user').that.has.property('id', 1);
+      done();
+    });
+
+    it('should throw an error if at least one of required keys is not present', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          requireOneOf: ['username', 'name'],
+          attributes: {
+            username: 'string',
+            name: 'string',
+          },
+        },
+      };
+      const params = { user: { id: 1 } };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'user must include one of username, name');
+      done();
+    });
+
+    it('should accept a valid object where one of required keys is present', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          requireOneOf: ['username', 'name'],
+          attributes: {
+            username: 'string',
+            name: 'string',
+          },
+        },
+      };
+      const params = { user: { id: 1, name: 'Bob' } };
+      const response = whitelister(rules, params);
+      expect(response).to.be.an('object').that.has.property('user').that.has.property('name', 'Bob');
+      done();
+    });
   });
 
   describe('rule: allowNull', () => {
