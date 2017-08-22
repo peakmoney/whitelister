@@ -207,6 +207,162 @@ describe('Whitelister', () => {
     });
   });
 
+  describe('type: boolean', () => {
+    it('should throw an error if value is a non-bool string "hello"', (done) => {
+      const rules = { accept: { type: 'boolean' } };
+      const params = { accept: 'hello' };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'accept is not true or false');
+      done();
+    });
+
+    it('should accept truthy values of 1, true, "TRUE", "1", and "t"', (done) => {
+      const rules = {
+        is_ok: 'boolean',
+        is_fine: 'boolean',
+        is_nice: 'boolean',
+        is_alright: 'boolean',
+        is_meh: 'boolean',
+      };
+      const params = {
+        is_ok: 1,
+        is_fine: true,
+        is_nice: 'TRUE',
+        is_alright: '1',
+        is_meh: 't',
+      };
+      const response = whitelister(rules, params);
+      expect(response).to.be.an('object');
+      expect(response).to.have.property('is_ok', true);
+      expect(response).to.have.property('is_fine', true);
+      expect(response).to.have.property('is_nice', true);
+      expect(response).to.have.property('is_alright', true);
+      expect(response).to.have.property('is_meh', true);
+      done();
+    });
+
+    it('should accept falsey values of 0, false, "false", "0", and "F"', (done) => {
+      const rules = {
+        is_ok: 'boolean',
+        is_fine: 'boolean',
+        is_nice: 'boolean',
+        is_alright: 'boolean',
+        is_meh: 'boolean',
+      };
+      const params = {
+        is_ok: 0,
+        is_fine: false,
+        is_nice: 'false',
+        is_alright: '0',
+        is_meh: 'F',
+      };
+      const response = whitelister(rules, params);
+      expect(response).to.be.an('object');
+      expect(response).to.have.property('is_ok', false);
+      expect(response).to.have.property('is_fine', false);
+      expect(response).to.have.property('is_nice', false);
+      expect(response).to.have.property('is_alright', false);
+      expect(response).to.have.property('is_meh', false);
+      done();
+    });
+  });
+
+  describe('type: string', () => {
+    it('should throw an error if value is an object', (done) => {
+      const rules = { message: 'string' };
+      const params = { message: { text: 'howdy' } };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'message is not a string');
+      done();
+    });
+
+    it('should accept value of "hello world"', (done) => {
+      const rules = { message: 'string' };
+      const params = { message: 'hello world' };
+      const response = whitelister(rules, params);
+      expect(response).to.have.property('message', 'hello world');
+      done();
+    });
+  });
+
+  describe('type: email', () => {
+    it('should throw an error if value is an object', (done) => {
+      const rules = { email: 'email' };
+      const params = { email: { text: 'howdy@thing.com' } };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'email is not a valid email address');
+      done();
+    });
+
+    it('should throw an error if domain is omitted', (done) => {
+      const rules = { email: 'email' };
+      const params = { email: 'bob@email' };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'email is not a valid email address');
+      done();
+    });
+
+    it('should throw an error if prefix is omitted', (done) => {
+      const rules = { email: 'email' };
+      const params = { email: '@email.com' };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'email is not a valid email address');
+      done();
+    });
+
+    it('should accept value of "bob@email.com"', (done) => {
+      const rules = { email: 'email' };
+      const params = { email: 'bob@email.com' };
+      const response = whitelister(rules, params);
+      expect(response).to.have.property('email', 'bob@email.com');
+      done();
+    });
+
+    it('should accept value of "bob+spam@email.com"', (done) => {
+      const rules = { email: 'email' };
+      const params = { email: 'bob+spam@email.com' };
+      const response = whitelister(rules, params);
+      expect(response).to.have.property('email', 'bob+spam@email.com');
+      done();
+    });
+  });
+
+  // TODO: figure out how to parse without moment, allow you to replace the validator function
+  describe.skip('type: date', () => {
+    it('should throw an error if value is an object', (done) => {
+      const rules = { tomorrow: 'date' };
+      const params = { tomorrow: { date: '2017-05-06' } };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'tomorrow is invalid');
+      done();
+    });
+  });
+
+  describe('type: array', () => {
+    it('should throw an error if value is an object', (done) => {
+      const rules = { digits: 'array' };
+      const params = { digits: { numbers: [1, 2, 3] } };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'digits is not an array');
+      done();
+    });
+
+    it('should throw an error if min length is not met', (done) => {
+      const rules = {
+        digits: { type: 'array', minLength: 7 },
+      };
+      const params = { digits: [1, 2, 3, 4, 5, 6] };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'digits has too few elements (min 7 elements)');
+      done();
+    });
+
+    it('should throw an error if max length is exceeded', (done) => {
+      const rules = {
+        digits: { type: 'array', maxLength: 7 },
+      };
+      const params = { digits: [1, 2, 3, 4, 5, 6, 7, 8, 9] };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'digits has too many elements (max 7 elements)');
+      done();
+    });
+  });
+
+  describe('type: object', () => {
+
+  });
+
   describe('rule: allowNull', () => {
     const rules = { name: { type: 'string', allowNull: true } };
     it('should return an object with property: null', (done) => {
