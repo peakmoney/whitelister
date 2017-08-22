@@ -458,4 +458,13 @@ describe('Whitelister', () => {
       done();
     });
   });
+
+  describe('rule: default', () => {
+    it('should return an object with a default value', (done) => {
+      const rules = { per_page: { type: 'integer', default: 20 } };
+      const response = whitelister(rules, {});
+      expect(response).to.be.an('object').that.has.property('per_page', 20);
+      done();
+    });
+  });
 });
