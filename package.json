@@ -19,10 +19,7 @@
     }
   ],
   "license": "UNLICENSED",
-  "dependencies": {
-    "debug": "^2.2.0",
-    "moment": "^2.13.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "chai": "^3.5.0",
