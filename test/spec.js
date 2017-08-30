@@ -322,16 +322,6 @@ describe('Whitelister', () => {
     });
   });
 
-  // TODO: figure out how to parse without moment, allow you to replace the validator function
-  describe.skip('type: date', () => {
-    it('should throw an error if value is an object', (done) => {
-      const rules = { tomorrow: 'date' };
-      const params = { tomorrow: { date: '2017-05-06' } };
-      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'tomorrow is invalid');
-      done();
-    });
-  });
-
   describe('type: array', () => {
     it('should throw an error if value is an object', (done) => {
       const rules = { digits: 'array' };
