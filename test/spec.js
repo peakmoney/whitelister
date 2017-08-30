@@ -1,10 +1,11 @@
 /* eslint-env node, mocha */
 
-const whitelister = require('../lib/whitelister');
+const Whitelister = require('../lib/whitelister');
 const { ArgumentError, WhitelistError } = require('../lib/errors');
 
 const { expect } = require('chai');
 
+const whitelister = Whitelister();
 
 describe('Whitelister', () => {
   it('should be a function', (done) => {
@@ -512,6 +513,23 @@ describe('Whitelister', () => {
       const response = whitelister(rules, params);
       expect(response).to.have.property('user')
         .that.has.property('id', 100);
+      done();
+    });
+  });
+
+  describe('Non-nested field names', () => {
+    const notNestedWhitelister = Whitelister({ nestedNames: false });
+    it('should not nest user.id', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: 'integer',
+          },
+        },
+      };
+      const params = { user: { id: 'hello' } };
+      expect(() => notNestedWhitelister(rules, params)).to.throw(WhitelistError, 'id is not an integer');
       done();
     });
   });
