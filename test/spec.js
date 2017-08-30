@@ -1,11 +1,9 @@
 /* eslint-env node, mocha */
 
-const Whitelister = require('../lib/whitelister');
+const whitelister = require('../lib/whitelister');
 const { ArgumentError, WhitelistError } = require('../lib/errors');
 
 const { expect } = require('chai');
-
-const whitelister = Whitelister();
 
 describe('Whitelister', () => {
   it('should be a function', (done) => {
@@ -517,8 +515,22 @@ describe('Whitelister', () => {
     });
   });
 
-  describe('Non-nested field names', () => {
-    const notNestedWhitelister = Whitelister({ nestedNames: false });
+  describe('Value transformations', () => {
+    it('should return value / 2', (done) => {
+      const rules = {
+        user_id: {
+          type: 'integer',
+          postTransform: val => (val / 2),
+        },
+      };
+      const params = { user_id: 100 };
+      const response = whitelister(rules, params);
+      expect(response).to.have.property('user_id', 50);
+      done();
+    });
+  });
+
+  describe('config: { nestedNames: false }', () => {
     it('should not nest user.id', (done) => {
       const rules = {
         user: {
@@ -529,7 +541,8 @@ describe('Whitelister', () => {
         },
       };
       const params = { user: { id: 'hello' } };
-      expect(() => notNestedWhitelister(rules, params)).to.throw(WhitelistError, 'id is not an integer');
+      whitelister.setConfig({ nestedNames: false });
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'id is not an integer');
       done();
     });
   });
