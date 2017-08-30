@@ -14,22 +14,12 @@ describe('Whitelister', () => {
 
   describe('basic errors', () => {
     it('should require rules as an argument', (done) => {
-      expect(() => whitelister()).to.throw(ArgumentError, 'rules is not an object');
+      expect(() => whitelister()).to.throw(ArgumentError, 'rules is not an object or string');
       done();
     });
 
-    it('should require rules (an object) as first argument', (done) => {
-      expect(() => whitelister('rules')).to.throw(ArgumentError, 'rules is not an object');
-      done();
-    });
-
-    it('should require params as a second argument', (done) => {
-      expect(() => whitelister({})).to.throw(ArgumentError, 'params is not an object');
-      done();
-    });
-
-    it('should require params (an object) as a second argument', (done) => {
-      expect(() => whitelister({}, 'params')).to.throw(ArgumentError, 'params is not an object');
+    it('should require rules (an object or string) as first argument', (done) => {
+      expect(() => whitelister(true)).to.throw(ArgumentError, 'rules is not an object or string');
       done();
     });
   });
