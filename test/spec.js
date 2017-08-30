@@ -447,4 +447,20 @@ describe('Whitelister', () => {
       done();
     });
   });
+
+  describe('custom filters', () => {
+    it('should throw an error for a short hand custom filter', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: val => val !== 100,
+          },
+        },
+      };
+      const params = { user: { id: 100 } };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'user[id] is invalid');
+      done();
+    });
+  });
 });
