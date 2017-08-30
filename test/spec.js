@@ -102,7 +102,7 @@ describe('Whitelister', () => {
         },
       };
       const params = { user: { secret_password: 'P@ssw0rd' } };
-      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'secret_password must be null');
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'user[secret_password] must be null');
       done();
     });
 
@@ -460,6 +460,58 @@ describe('Whitelister', () => {
       };
       const params = { user: { id: 100 } };
       expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'user[id] is invalid');
+      done();
+    });
+
+    it('should throw an error for a long form custom filter', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: {
+              type: 'integer',
+              filterWith: val => val !== 100,
+            },
+          },
+        },
+      };
+      const params = { user: { id: 100 } };
+      expect(() => whitelister(rules, params)).to.throw(WhitelistError, 'user[id] is invalid');
+      done();
+    });
+
+    it('should successfully use a short hand custom filter', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: val => val === 100,
+          },
+        },
+      };
+      const params = { user: { id: 100 } };
+      const response = whitelister(rules, params);
+      expect(response).to.have.property('user')
+        .that.has.property('id', 100);
+      done();
+    });
+
+    it('should throw an error for a long form custom filter', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: {
+              type: 'integer',
+              filterWith: val => val === 100,
+            },
+          },
+        },
+      };
+      const params = { user: { id: 100 } };
+      const response = whitelister(rules, params);
+      expect(response).to.have.property('user')
+        .that.has.property('id', 100);
       done();
     });
   });
