@@ -1,0 +1,13 @@
+<h2 id="configuration">Configuration</h2>
+
+<p>
+  Whitelister is ready to use. However, when producing error messages, whitelister
+provides the entire path of the offending property. For those who depend on only
+the name of the offending property and not its path, you can set the following
+configuration immediately after requiring whitelister:
+</p>
+
+{% highlight js %}
+const whitelister = require('whitelister');
+whitelister.setConfig({ nestedNames: false });
+{% endhighlight %}

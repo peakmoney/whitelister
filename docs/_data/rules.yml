@@ -1,0 +1,176 @@
+- name: type
+  subtitle: |
+    string <b>required</b>
+  description: The type of value to be filtered.
+  example: |
+    const rules = {
+      user_id: { type: 'integer' },
+    };
+
+    // or shorthand
+    const rules = { user_id: 'integer' };
+  types: all
+
+- name: required
+  subtitle: |
+    boolean [default: false]
+  description: Throws an error if the value is missing.
+  example: |
+    const rules = {
+      user_id: { required: true },
+    };
+  types: all
+
+- name: allowNull
+  subtitle: |
+    string <b>required</b> [default: false]
+  description: Allow the value to be null. For example, a user wants to remove their email address on update.
+  example: |
+    const rules = {
+      email: { type: 'email', allowNull: true },
+    };
+  types: all
+
+- name: default
+  subtitle: any
+  description: Set the property to a default value if the value is undefined. For example, setting a default page number for pagination.
+  example: |
+    const rules = {
+      page: { type: 'integer', default: 1 },
+    };
+  types: all
+
+- name: acceptedValues
+  subtitle: array
+  description: Expect the value of the property to be one of the accepted values. For example, a member's role can only be changed to one of N values.
+  example: |
+    const rules = {
+      role: { type: 'string', acceptedValues: ['admin', 'member', 'owner'] },
+    };
+  types: all
+
+- name: filterWith
+  subtitle: function [should return true or false]
+  description: A custom filter to run along with any other specified rules. For example, checking a date.
+  example: |
+    const rules = {
+      date: {
+        type: 'string',
+        filterWith: (val) => {
+          if (val) {
+            return moment(val).isBefore(moment(), 'day');
+          }
+          return true;
+        },
+      },
+    };
+  types: all
+
+- name: preTransform
+  subtitle: function [should return the value to be validated]
+  description: Mutate the value of the property <b>before</b> validation. For example, some enumerable.
+  example: |
+    const rules = {
+      state: {
+        type: 'integer',
+        preTransform: (val) => {
+          if (typeof val === 'string') {
+            return states[val];
+          }
+          return val;
+        },
+      },
+    };
+  types: all
+
+- name: postTransform
+  subtitle: function [should return the value you want to receive after validation]
+  description: Mutate the value returned <b>after</b> validation of the property. For example, modifying a date.
+  example: |
+    const rules = {
+      date: {
+        type: 'string',
+        postTransform: val => moment(val).format('ggggww'),
+      },
+    };
+  types: all
+
+- name: min
+  subtitle: integer
+  description: Minimum acceptable value. For example, page.
+  example: |
+    const rules = {
+      page: { type: 'integer', min: 1 },
+    };
+  types: float, integer
+
+- name: max
+  subtitle: integer
+  description: Maximum acceptable value. For example, per_page.
+  example: |
+    const rules = {
+      per_page: { type: 'integer', max: 100 },
+    };
+  types: float, integer
+
+- name: minLength
+  subtitle: integer
+  description: Minimum acceptable length of an array or string. For example, elements.
+  example: |
+    const rules = {
+      elements: { array: 'string', minLength: 1 },
+    };
+  types: array, string
+
+- name: maxLength
+  subtitle: integer
+  description: Maximum acceptable length of an array or string. For example, a username.
+  example: |
+    const rules = {
+      username: { type: 'string', maxLength: 30 },
+    };
+  types: all
+
+- name: requireOneOf
+  subtitle: array
+  description: Require that an object have at least one of the following keys. For example, username or email.
+  example: |
+    const rules = {
+      user: {
+        type: 'object',
+        attributes: { email: 'email', username: 'string' },
+        requireOneOf: ['email', 'username'],
+      },
+    };
+  types: object
+
+- name: attributes
+  subtitle: |
+    object
+  description: Require an array's elements to meet the given rules, or provide rules for an object's properties. For example, nested associations.
+  example: |
+    const rules = {
+      user: {
+        // object
+        type: 'object',
+        attributes: {
+          email: 'email',
+          address: {
+            type: 'object',
+            attributes: {
+              city: 'string',
+              state: 'string',
+            },
+          },
+          // array
+          image_urls: {
+            type: 'array',
+            attributes: {
+              type: 'string',
+            },
+          },
+        },
+      },,
+    };
+  types: array, object
+

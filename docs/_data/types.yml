@@ -1,0 +1,15 @@
+- name: array
+
+- name: boolean
+
+- name: email
+
+- name: float
+
+- name: integer
+
+- name: null
+
+- name: object
+
+- name: string

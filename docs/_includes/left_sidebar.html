@@ -1,0 +1,25 @@
+<div class="col-12 col-md-3 col-xl-2">
+  <h3>Installation</h3>
+  <h3>Configuration</h3>
+  <h3>Rules</h3>
+  <ul class="nav flex-column">
+    {% for rule in site.data.rules %}
+      <li class="nav-item">
+        <a class="nav-link" href="#rules-{{ rule.name }}">
+          {{ rule.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  <h3>Types</h3>
+  <ul class="nav flex-column">
+    {% for type in site.data.types %}
+      <li class="nav-item">
+        <a class="nav-link" href="#types-{{ type.name }}">
+          {{ type.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  <h3>Usage Examples</h3>
+</div>

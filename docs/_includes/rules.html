@@ -1,0 +1,57 @@
+<h2 id="rules">Rules</h2>
+
+<p>
+  Rules refer to the options you can pass to whitelister instructing it how to
+  filter and validate input. Some rules apply to all types while other rules
+  are specific to one or more types.
+</p>
+
+<p>
+  Rules are usually an object, for example:
+
+  {% highlight js %}
+const rules = {
+  user_id: { type: 'integer' },
+  email: { type: 'email', required: true },
+};
+{% endhighlight %}
+
+  If you only need to pass a <i>type</i> rule, use shorthand:
+
+  {% highlight js %}
+const rules = {
+  user_id: 'integer',
+  email: { type: 'email', required: true },
+};
+{% endhighlight %}
+
+  Finally, you can pass a "custom" rule in the form of a function:
+
+  {% highlight js %}
+const rules = {
+  user_id: { type: 'integer' },
+  email: (val) => {
+    if (val === 'david@spire.me') {
+      return 'david@spirelabs.co';
+    }
+    return val;
+  },
+};
+{% endhighlight %}
+</p>
+
+{% for rule in site.data.rules %}
+<div class="card mb-3" id="rules-{{ rule.name }}">
+  <div class="card-body">
+    <h4 class="card-title">{{ rule.name }}</h4>
+    <h6 class="card-subtitle mb-2 text-muted">{{ rule.subtitle }}</h6>
+    <p class="card-text">{{ rule.description }}</p>
+
+{% highlight js %}
+{{ rule.example }}
+{% endhighlight %}
+
+  <i>types: {{ rule.types }}</i>
+  </div>
+</div>
+{% endfor %}
