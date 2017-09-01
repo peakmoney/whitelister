@@ -1,0 +1,78 @@
+<h2 class="display-2">Whitelister</h2>
+    <p class="text-muted">Simple, basic filtering and validation tool for Node.js.</p>
+    <p>
+      Whitelister allows you to simultaneously filter <i>and</i> validate a wide range of data. For example, you can validate and filter:
+      <ul>
+        <li>a single value</li>
+        <li>an array, its properties, and its contents</li>
+        <li>an object and its key/value pairs</li>
+      </ul>
+      All code is happily hosted on <a href="https://github.com/SpireTeam/whitelister">Github</a>, including <a href="https://github.com/SpireTeam/whitelister/blob/master/test/spec.js">tests</a>.
+    </p>
+    <p>Requires <a href="https://nodejs.org/en/">Node.js</a> 6 or higher.</p>
+    <h2 id="introduction">Introduction</h2>
+    <p>
+      The most common way to use whitelister is to validate and filter incoming parameters.
+
+      {% highlight js %}
+const rules = {
+  username: { type: 'string', minLength: 3, maxLength: 30 },
+  email: 'email',
+};
+
+const params = {
+  username: 'david',
+  email: 'david@spirelabs.co',
+  admin: true,
+};
+
+const filteredParams = whitelister(rules, params);
+// => { username: 'david', email: 'david@spirelabs.co' }
+      {% endhighlight %}
+
+      Another important way to use whitelister is to filter the data you output.
+
+      {% highlight js %}
+const rules = {
+  users: {
+    type: 'array',
+    attributes: {
+      id: 'integer',
+      username: 'string',
+    },
+  },
+};
+
+const params = {
+  users: [
+    { id: 1, username: 'david', email: 'david@spirelabs.co', password: 'P@ssw0rd' },
+    { id: 2, username: 'rob', email: 'rob@spirelabs.co', password: '0H(@nAda' },
+  ],
+};
+
+const response = whitelister(rules, params);
+// => [{ id: 1, username: 'david' }, { id: 2, username: 'rob' }]
+      {% endhighlight %}
+
+      Finally, whitelister truly blurs the line between filtering and validation. When a value fails validation, whitelister throws an error.
+
+      {% highlight js %}
+const rules = {
+  user: {
+    type: 'object',
+    required: true,
+    attributes: {
+      email: { type: 'email', required: true },
+      password: { type: 'string', required: true },
+    },
+  },
+};
+
+const params = {
+  user: { email: 'david@spirelabs.co' },
+};
+
+return Promise.try(() => whitelister(rules, params));
+// => throws WhitelistError user[password] is required
+      {% endhighlight %}
+    </p>

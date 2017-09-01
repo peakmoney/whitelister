@@ -24,6 +24,4 @@ const filteredParams = whitelister(rules, params);
 // => { page: 1, per_page: 20, q: 'hello' };
 ```
 
-## API
-
-### whitelister(rules, params, [parentName])
+You can find the full documentation on the website: https://spireteam.github.io/whitelister/

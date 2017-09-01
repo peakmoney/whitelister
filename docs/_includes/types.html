@@ -30,8 +30,9 @@ const rules = {
 <div class="card mb-3" id="types-{{ type.name }}">
   <div class="card-body">
     <h4 class="card-title">{{ type.name }}</h4>
+    <p class="card-text">Accepted values: {{ type.accepts }}</p>
     <p>
-      special rules: {% if type.special_rules -%}
+      Special rules: {% if type.special_rules -%}
       {%- for rule in type.special_rules limit:length -%}<a href="#rules-{{ rule }}">{{ rule }}</a>, {% endfor -%}
       {%- else -%}
       <i>none</i>

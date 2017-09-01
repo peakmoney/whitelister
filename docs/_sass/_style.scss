@@ -5,8 +5,10 @@
 
 // Sidebar
 .spire-sidebar {
+  position: fixed;
+  min-width: 250px;
+  padding-top: 2rem;
   max-height: calc(100vh - 4rem);
-  top: 4rem;
   border-right: 1px solid rgba(0,0,0,.125);
   z-index: 1000;
 
@@ -29,6 +31,8 @@
 // Main Content
 .spire-main {
   padding-top: 1rem;
+  width: 750px;
+  margin-left: 250px;
 
   h2 {
     margin-top: 2rem;

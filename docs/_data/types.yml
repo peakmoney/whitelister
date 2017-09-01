@@ -1,21 +1,29 @@
 - name: array
   special_rules: ["minLength", "maxLength", "attributes"]
+  accepts: Arrays and strings. Strings are split using <code>arry.split(',')</code>.
 
 - name: boolean
+  accepts: Booleans (<code>true</code>, <code>false</code>), integers (<code>1</code>, <code>0</code>), and strings (<code>"t"</code>, <code>"f"</code>, <code>"true"</code>, <code>"false"</code>). Integers are converted to strings before validation. Values are <b>not</b> case sensitive.
 
 - name: email
   special_rules: ["minLength", "maxLength"]
+  accepts: Strings.
 
 - name: float
   special_rules: ["min", "max"]
+  accepts: Numbers and strings. Whitelister tries to parse strings into floats.
 
 - name: integer
   special_rules: ["min", "max"]
+  accepts: Numbers and strings. Whitelister tries to parse strings into integers.
 
 - name: "null"
+  accepts: <code>null</code>
 
 - name: object
   special_rules: ["requireOneOf", "attributes"]
+  accepts: Objects.
 
 - name: string
   special_rules: ["minLength", "maxLength"]
+  accepts: Strings. Empty strings such as <code>""</code> are considered invalid when <code>required</code> is set to <code>true</code>.
