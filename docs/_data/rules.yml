@@ -14,7 +14,8 @@
 - name: required
   subtitle: |
     boolean [default: false]
-  description: Throws an error if the value is missing.
+  description: |
+    Throws an error if the value is undefined. Also throws an error if the value is null unless <a href="#rules-allowNull">allowNull</a> is true.
   example: |
     const rules = {
       user_id: { required: true },
@@ -23,8 +24,8 @@
 
 - name: allowNull
   subtitle: |
-    string <b>required</b> [default: false]
-  description: Allow the value to be null. For example, a user wants to remove their email address on update.
+    boolean [default: false]
+  description: Allows a null value through. Undefined values will be ignored. For example, a user wants to remove their email address on update.
   example: |
     const rules = {
       email: { type: 'email', allowNull: true },
@@ -50,8 +51,8 @@
   types: all
 
 - name: filterWith
-  subtitle: function [should return true or false]
-  description: A custom filter to run along with any other specified rules. For example, checking a date.
+  subtitle: function [must return true or false]
+  description: A custom filter to run along with any other specified rules. If the filter returns true, the value is allowed through. If the filter returns false, the value is filtered, or if `required` is true, an error is thrown. For example, checking a date.
   example: |
     const rules = {
       date: {
@@ -67,8 +68,8 @@
   types: all
 
 - name: preTransform
-  subtitle: function [should return the value to be validated]
-  description: Mutate the value of the property <b>before</b> validation. For example, some enumerable.
+  subtitle: function [must return the value to be validated]
+  description: Mutate the value of the property <b>before</b> validating it. The value returned by preTransform is the value allowed through after validation. For example, some enumerable.
   example: |
     const rules = {
       state: {
@@ -85,7 +86,7 @@
 
 - name: postTransform
   subtitle: function [should return the value you want to receive after validation]
-  description: Mutate the value returned <b>after</b> validation of the property. For example, modifying a date.
+  description: Used to replace, mutate, or otherwise change the value recieved after validation is successful. For example, modifying a date.
   example: |
     const rules = {
       date: {
