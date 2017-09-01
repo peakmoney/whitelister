@@ -1,1 +1,42 @@
-<h2>Types</h2>
+<h2 id="types">Types</h2>
+
+<p>
+  A type tells whitelister what to allow through its filter (or validate against).
+  Different types support varying <a href="#rules">rules</a> for whitelister
+  to validate against.
+</p>
+
+<p>
+  Types can be passed as a rule:
+
+  {% highlight js %}
+const rules = {
+  user_id: { type: 'integer' },
+};
+{% endhighlight %}
+
+  Or shorthand when alone:
+
+  {% highlight js %}
+const rules = {
+  user_id: 'integer',
+};
+{% endhighlight %}
+
+  Currently, whitelister doesn't support "custom" types, but it is being discussed.
+</p>
+
+{% for type in site.data.types %}
+<div class="card mb-3" id="types-{{ type.name }}">
+  <div class="card-body">
+    <h4 class="card-title">{{ type.name }}</h4>
+    <p>
+      special rules: {% if type.special_rules -%}
+      {%- for rule in type.special_rules limit:length -%}<a href="#rules-{{ rule }}">{{ rule }}</a>, {% endfor -%}
+      {%- else -%}
+      <i>none</i>
+      {%- endif -%}
+    </p>
+  </div>
+</div>
+{% endfor %}

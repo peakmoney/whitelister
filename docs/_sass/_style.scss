@@ -1,3 +1,40 @@
+// Top Navbar
+.navbar-dark {
+  background-color: #2FC6FF;
+}
+
+// Sidebar
+.spire-sidebar {
+  max-height: calc(100vh - 4rem);
+  top: 4rem;
+  border-right: 1px solid rgba(0,0,0,.125);
+
+  .spire-links {
+    max-height: calc(100vh - 9rem);
+    overflow-y: auto;
+
+    .spire-link {
+      text-decoration: none;
+      display: block;
+      padding: .25rem .5rem;
+    }
+  }
+}
+
+.spire-sub-link {
+  font-size: .75rem;
+}
+
+// Main Content
+.spire-main {
+  padding-top: 1rem;
+
+  h2 {
+    margin-top: 2rem;
+  }
+}
+
+// Code Snippets
 .highlight {
   padding: 1rem;
   margin-top: 1rem;
@@ -12,4 +49,10 @@
   margin-bottom: 0;
   background-color: transparent;
   border: 0;
+}
+
+// Footer
+.footer {
+  text-align: center;
+  margin: 50px;
 }

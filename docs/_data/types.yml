@@ -1,15 +1,21 @@
 - name: array
+  special_rules: ["minLength", "maxLength", "attributes"]
 
 - name: boolean
 
 - name: email
+  special_rules: ["minLength", "maxLength"]
 
 - name: float
+  special_rules: ["min", "max"]
 
 - name: integer
+  special_rules: ["min", "max"]
 
-- name: null
+- name: "null"
 
 - name: object
+  special_rules: ["requireOneOf", "attributes"]
 
 - name: string
+  special_rules: ["minLength", "maxLength"]
