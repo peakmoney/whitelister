@@ -19,13 +19,18 @@
     .spire-link {
       text-decoration: none;
       display: block;
-      padding: .25rem .5rem;
+      padding: .15rem .5rem;
+
+      h6 {
+        margin-bottom: .15rem;
+      }
     }
   }
 }
 
 .spire-sub-link {
   font-size: .75rem;
+  padding: .15rem 1rem;
 }
 
 // Main Content
