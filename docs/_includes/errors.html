@@ -8,7 +8,31 @@
   <div class="card-body">
     <h4 class="card-title">BaseError</h4>
     <h6 class="card-subtitle mb-2 text-muted"></h6>
-    <p class="card-text">All of Whitelister's custom errors inherit from <code>BaseError</code>. This makes it easy to catch all Whitelister errors in one place if you so choose.</p>
+    <p class="card-text">All of Whitelister's custom errors inherit from <code>BaseError</code>. This makes it easy to catch all Whitelister errors in one place.</p>
+
+{% highlight js %}
+
+{% endhighlight %}
+  </div>
+</div>
+
+<div class="card mb-3" id="errors-argument">
+  <div class="card-body">
+    <h4 class="card-title">ArgumentError</h4>
+    <h6 class="card-subtitle mb-2 text-muted"></h6>
+    <p class="card-text">An <code>ArgumentError</code> is thrown when any of Whitelister's internal validations or filters receive an invalid argument.</p>
+
+{% highlight js %}
+
+{% endhighlight %}
+  </div>
+</div>
+
+<div class="card mb-3" id="errors-whitelist">
+  <div class="card-body">
+    <h4 class="card-title">WhitelistError</h4>
+    <h6 class="card-subtitle mb-2 text-muted"></h6>
+    <p class="card-text">A <code>WhitelistError</code> is thrown when a target fails validation against a defined rule.</p>
 
 {% highlight js %}
 
