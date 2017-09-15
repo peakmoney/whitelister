@@ -101,12 +101,16 @@ describe('Whitelister (asynchronous)', () => {
         email: 'bob@email.com',
         name: 'Bob Smith',
       };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'id is required')
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
         .then((response) => {
-          expect(response).to.be.an.instanceof(WhitelistError);
-          expect(response).to.have.property('whitelist')
-            .to.be.an('object')
-            .that.has.property('id', 'is required');
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'id');
+          expect(response.errors[0]).to.have.property('message', 'is required');
+
           done();
         });
     });
@@ -124,7 +128,18 @@ describe('Whitelister (asynchronous)', () => {
         },
       };
       const params = { user: { secret_password: 'P@ssw0rd' } };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user[secret_password] must be null').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user[secret_password]');
+          expect(response.errors[0]).to.have.property('message', 'must be null');
+
+          done();
+        });
     });
 
     it('should return an object where user.secret_password is null', (done) => {
@@ -152,7 +167,18 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is "hello"', (done) => {
       const rules = { user_id: { type: 'integer' } };
       const params = { user_id: 'hello' };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user_id is not an integer').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user_id');
+          expect(response.errors[0]).to.have.property('message', 'is not an integer');
+
+          done();
+        });
     });
 
     it('should parse "100" to integer', (done) => {
@@ -178,13 +204,35 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is above 10', (done) => {
       const rules = { user_id: { type: 'integer', max: 10 } };
       const params = { user_id: 11 };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user_id is too large (max 10)').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user_id');
+          expect(response.errors[0]).to.have.property('message', 'is too large (max 10)');
+
+          done();
+        });
     });
 
     it('should throw an error if value is below 10', (done) => {
       const rules = { user_id: { type: 'integer', min: 10 } };
       const params = { user_id: 9 };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user_id is too small (min 10)').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user_id');
+          expect(response.errors[0]).to.have.property('message', 'is too small (min 10)');
+
+          done();
+        });
     });
   });
 
@@ -192,7 +240,18 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is "hello"', (done) => {
       const rules = { amount: { type: 'float' } };
       const params = { amount: 'hello' };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'amount is not a float').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'amount');
+          expect(response.errors[0]).to.have.property('message', 'is not a float');
+
+          done();
+        });
     });
 
     it('should parse "99.9" to float', (done) => {
@@ -218,13 +277,35 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is above 44.4', (done) => {
       const rules = { amount: { type: 'float', max: 44.4 } };
       const params = { amount: 44.6 };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'amount is too large (max 44.4)').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'amount');
+          expect(response.errors[0]).to.have.property('message', 'is too large (max 44.4)');
+
+          done();
+        });
     });
 
     it('should throw an error if value is below 44.4', (done) => {
       const rules = { amount: { type: 'float', min: 44.4 } };
       const params = { amount: 44.2 };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'amount is too small (min 44.4)').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'amount');
+          expect(response.errors[0]).to.have.property('message', 'is too small (min 44.4)');
+
+          done();
+        });
     });
   });
 
@@ -232,7 +313,18 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is a non-bool string "hello"', (done) => {
       const rules = { accept: { type: 'boolean' } };
       const params = { accept: 'hello' };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'accept is not true or false').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'accept');
+          expect(response.errors[0]).to.have.property('message', 'is not true or false');
+
+          done();
+        });
     });
 
     it('should accept truthy values of 1, true, "TRUE", "1", and "t"', (done) => {
@@ -294,7 +386,18 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is an object', (done) => {
       const rules = { message: 'string' };
       const params = { message: { text: 'howdy' } };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'message is not a string').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'message');
+          expect(response.errors[0]).to.have.property('message', 'is not a string');
+
+          done();
+        });
     });
 
     it('should accept value of "hello world"', (done) => {
@@ -312,19 +415,52 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is an object', (done) => {
       const rules = { email: 'email' };
       const params = { email: { text: 'howdy@thing.com' } };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'email is not a valid email address').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'email');
+          expect(response.errors[0]).to.have.property('message', 'is not a valid email address');
+
+          done();
+        });
     });
 
     it('should throw an error if domain is omitted', (done) => {
       const rules = { email: 'email' };
       const params = { email: 'bob@email' };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'email is not a valid email address').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'email');
+          expect(response.errors[0]).to.have.property('message', 'is not a valid email address');
+
+          done();
+        });
     });
 
     it('should throw an error if prefix is omitted', (done) => {
       const rules = { email: 'email' };
       const params = { email: '@email.com' };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'email is not a valid email address').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'email');
+          expect(response.errors[0]).to.have.property('message', 'is not a valid email address');
+
+          done();
+        });
     });
 
     it('should accept value of "bob@email.com"', (done) => {
@@ -352,7 +488,18 @@ describe('Whitelister (asynchronous)', () => {
     it('should throw an error if value is an object', (done) => {
       const rules = { digits: 'array' };
       const params = { digits: { numbers: [1, 2, 3] } };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'digits is not an array').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'digits');
+          expect(response.errors[0]).to.have.property('message', 'is not an array');
+
+          done();
+        });
     });
 
     it('should throw an error if min length is not met', (done) => {
@@ -360,7 +507,18 @@ describe('Whitelister (asynchronous)', () => {
         digits: { type: 'array', minLength: 7 },
       };
       const params = { digits: [1, 2, 3, 4, 5, 6] };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'digits has too few elements (min 7 elements)').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'digits');
+          expect(response.errors[0]).to.have.property('message', 'has too few elements (min 7 elements)');
+
+          done();
+        });
     });
 
     it('should throw an error if max length is exceeded', (done) => {
@@ -368,7 +526,18 @@ describe('Whitelister (asynchronous)', () => {
         digits: { type: 'array', maxLength: 7 },
       };
       const params = { digits: [1, 2, 3, 4, 5, 6, 7, 8, 9] };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'digits has too many elements (max 7 elements)').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'digits');
+          expect(response.errors[0]).to.have.property('message', 'has too many elements (max 7 elements)');
+
+          done();
+        });
     });
 
     it('should accept a valid array of numbers', (done) => {
@@ -414,7 +583,18 @@ describe('Whitelister (asynchronous)', () => {
         },
       };
       const params = { user: 'hello world' };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user is not an object').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user');
+          expect(response.errors[0]).to.have.property('message', 'is not an object');
+
+          done();
+        });
     });
 
     it('should accept a valid object', (done) => {
@@ -446,7 +626,18 @@ describe('Whitelister (asynchronous)', () => {
         },
       };
       const params = { user: { id: 1 } };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user must include one of username, name').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user');
+          expect(response.errors[0]).to.have.property('message', 'must include one of username, name');
+
+          done();
+        });
     });
 
     it('should accept a valid object where one of required keys is present', (done) => {
@@ -502,7 +693,18 @@ describe('Whitelister (asynchronous)', () => {
         },
       };
       const params = { user: { id: 100 } };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user[id] is invalid').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user[id]');
+          expect(response.errors[0]).to.have.property('message', 'is invalid');
+
+          done();
+        });
     });
 
     it('should throw an error for a long form custom filter', (done) => {
@@ -518,7 +720,18 @@ describe('Whitelister (asynchronous)', () => {
         },
       };
       const params = { user: { id: 100 } };
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'user[id] is invalid').and.notify(done);
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'user[id]');
+          expect(response.errors[0]).to.have.property('message', 'is invalid');
+
+          done();
+        });
     });
 
     it('should successfully use a short hand custom filter', (done) => {
@@ -588,7 +801,19 @@ describe('Whitelister (asynchronous)', () => {
       };
       const params = { user: { id: 'hello' } };
       whitelister.setConfig({ nestedNames: false });
-      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError, 'id is not an integer').and.notify(done);
+
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(1);
+
+          expect(response.errors[0]).to.have.property('field', 'id');
+          expect(response.errors[0]).to.have.property('message', 'is not an integer');
+
+          done();
+        });
     });
   });
 });
