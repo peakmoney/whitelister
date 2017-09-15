@@ -84,9 +84,9 @@ describe('Whitelister (synchronous)', () => {
       };
       expect(() => whitelister.sync(rules, params)).to.throw(WhitelistError, 'id is required');
       expect(() => whitelister.sync(rules, params)).to.throw(WhitelistError)
-        .with.property('whitelist')
-        .that.is.an('object')
-        .that.has.property('id', 'is required');
+        .with.property('errors')
+        .that.is.an('array')
+        .that.has.lengthOf(1);
       done();
     });
   });
