@@ -4,6 +4,16 @@
   Whitelister uses custom error classes internally. All custom error classes are exposed directly by Whitelister for your convenience.
 </p>
 
+<p>
+  Using Whitelister's custom error classes, you can control what does and doesn't bubble up. For example:
+</p>
+
+{% highlight js %}
+return Promise.try(() => {
+
+})
+{% endhighlight %}
+
 <div class="card mb-3" id="errors-base">
   <div class="card-body">
     <h4 class="card-title">BaseError</h4>
