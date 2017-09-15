@@ -114,6 +114,58 @@ describe('Whitelister (asynchronous)', () => {
           done();
         });
     });
+
+    it('should return errors for multiple fields', (done) => {
+      const rules = {
+        name: { type: 'string', required: true },
+        id: { type: 'integer', required: true },
+      };
+      const params = {
+        email: 'bob@email.com',
+      };
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(2);
+
+          expect(response.errors.some(e => (e.field === 'name' && e.message === 'is required'))).to.equal(true);
+          expect(response.errors.some(e => (e.field === 'id' && e.message === 'is required'))).to.equal(true);
+
+          done();
+        });
+    });
+
+    it('should return errors for multiple nested fields fields', (done) => {
+      const rules = {
+        name: { type: 'string', required: true },
+        id: { type: 'integer', required: true },
+        league: {
+          type: 'object',
+          attributes: {
+            slug: { type: 'string', required: true },
+          },
+        },
+      };
+      const params = {
+        email: 'bob@email.com',
+        league: { description: 'Coolest league ever' },
+      };
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('errors')
+            .that.is.an('array')
+            .that.has.lengthOf(3);
+
+          expect(response.errors.some(e => (e.field === 'name' && e.message === 'is required'))).to.equal(true);
+          expect(response.errors.some(e => (e.field === 'id' && e.message === 'is required'))).to.equal(true);
+          expect(response.errors.some(e => (e.field === 'league[slug]' && e.message === 'is required'))).to.equal(true);
+
+          done();
+        });
+    });
   });
 
   describe('type: null', () => {
