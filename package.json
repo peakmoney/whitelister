@@ -23,6 +23,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "chai": "^3.5.0",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^4.4.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
