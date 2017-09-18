@@ -12,7 +12,6 @@
 .spire-sidebar {
   position: fixed;
   min-width: 250px;
-  padding-top: 2rem;
   height: 100%;
   z-index: 1000;
   background: #FFFFFF;
@@ -20,6 +19,7 @@
   .spire-links {
     height: 100%;
     overflow-y: auto;
+    padding-top: 2rem;
 
     .spire-link {
       text-decoration: none;
