@@ -1,6 +1,6 @@
 {
   "name": "whitelister",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple, basic filtering and validation tool for Node.js.",
   "main": "whitelister.js",
   "repository": {
@@ -11,7 +11,15 @@
     "test": "NODE_ENV=test mocha --require mocha-clean --timeout=10000",
     "lint": "eslint ."
   },
-  "keywords": ["parameters", "params", "whitelist", "validation", "validation-library", "whitelist-validation", "whitelisting-filter"],
+  "keywords": [
+    "parameters",
+    "params",
+    "whitelist",
+    "validation",
+    "validation-library",
+    "whitelist-validation",
+    "whitelisting-filter"
+  ],
   "homepage": "https://spireteam.github.io/whitelister/",
   "bugs": "https://github.com/SpireTeam/whitelister/issues",
   "contributors": [
