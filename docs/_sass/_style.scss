@@ -13,11 +13,12 @@
   position: fixed;
   min-width: 250px;
   padding-top: 2rem;
-  max-height: calc(100vh - 4rem);
+  height: 100%;
   z-index: 1000;
+  background: #FFFFFF;
 
   .spire-links {
-    max-height: calc(100vh - 9rem);
+    height: 100%;
     overflow-y: auto;
 
     .spire-link {
