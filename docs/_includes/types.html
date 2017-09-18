@@ -33,7 +33,7 @@ const rules = {
     <p class="card-text">Accepted values: {{ type.accepts }}</p>
     <p>
       Special rules: {% if type.special_rules -%}
-      {%- for rule in type.special_rules limit:length -%}<a href="#rules-{{ rule }}">{{ rule }}</a>, {% endfor -%}
+      {%- for rule in type.special_rules limit:length -%}<a href="#rules-{{ rule }}">{{ rule }}</a> {% endfor -%}
       {%- else -%}
       <i>none</i>
       {%- endif -%}

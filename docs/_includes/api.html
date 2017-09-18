@@ -1,0 +1,70 @@
+<h2 id="api">API</h2>
+
+<p>Whitelister's main function returns a <code>Promise</code> by default.</p>
+
+<div class="card mb-3" id="api-whitelister">
+  <div class="card-body">
+    <h4 class="card-title">Whitelister(rules, params)</h4>
+    <h6 class="card-subtitle mb-2">rules <span class="text-muted">object | string <b>required</b></span></h6>
+    <h6 class="card-subtitle mb-2">params <span class="text-muted">any</span></h6>
+
+{% highlight js %}
+const whitelister = require('whitelister');
+
+const rules = {
+  page: { type: 'integer', default: 1, min: 1 },
+  per_page: { type: 'integer', default: 25, min: 1, max: 100 },
+};
+
+const params = {
+  page: 1,
+  per_page: 25,
+};
+
+return whitelister(rules, params)
+.then((filteredParams) => {
+  console.log(filteredParams);
+})
+.catch(whitelister.errors.WhitelistError, (err) => {
+  console.log(err.toJSON());
+});
+{% endhighlight %}
+  </div>
+</div>
+
+<p>Whitelister also offers a synchronous interface.</p>
+
+<div class="card mb-3" id="api-whitelister-sync">
+  <div class="card-body">
+    <h4 class="card-title">Whitelister.sync(rules, params)</h4>
+    <h6 class="card-subtitle mb-2">rules <span class="text-muted">object | string <b>required</b></span></h6>
+    <h6 class="card-subtitle mb-2">params <span class="text-muted">any</span></h6>
+
+{% highlight js %}
+const whitelister = require('whitelister');
+
+const rules = {
+  page: { type: 'integer', default: 1, min: 1 },
+  per_page: { type: 'integer', default: 25, min: 1, max: 100 },
+};
+
+const params = {
+  page: 1,
+  per_page: 25,
+};
+
+let filteredParams;
+try {
+  filteredParams = whitelister.sync(rules, params);
+} catch (e) {
+  if (e instanceof whitelister.errors.WhitelistError) {
+    console.log(e.toJSON());
+  } else {
+    // do something else
+  }
+}
+
+console.log(filteredParams);
+{% endhighlight %}
+  </div>
+</div>

@@ -3,6 +3,11 @@
     <a href="/">
       <h5>Whitelister</h1>
     </a>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link spire-sub-link" href="https://github.com/SpireTeam/whitelister">GitHub</a>
+      </li>
+    </ul>
     <a class="spire-link" href="#introduction">
       <h6>Introduction</h6>
     </a>
@@ -12,6 +17,17 @@
     <a class="spire-link" href="#configuration">
       <h6>Configuration</h6>
     </a>
+    <a class="spire-link" href="#api">
+      <h6>API</h6>
+    </a>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link spire-sub-link" href="#api-whitelister">async</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link spire-sub-link" href="#api-whitelister-sync">sync</a>
+      </li>
+    </ul>
     <a class="spire-link" href="#rules">
       <h6>Rules</h6>
     </a>
@@ -32,6 +48,18 @@
         <li class="nav-item">
           <a class="nav-link spire-sub-link" href="#types-{{ type.name }}">
             {{ type.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    <a class="spire-link" href="#errors">
+      <h6>Errors</h6>
+    </a>
+    <ul class="nav flex-column">
+      {% for err in site.data.errors %}
+        <li class="nav-item">
+          <a class="nav-link spire-sub-link" href="#errors-{{ err.type }}">
+            {{ err.type }}
           </a>
         </li>
       {% endfor %}

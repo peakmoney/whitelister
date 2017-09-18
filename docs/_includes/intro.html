@@ -1,17 +1,19 @@
-<h2 class="display-2">Whitelister</h2>
-    <p class="text-muted">Simple, basic filtering and validation tool for Node.js.</p>
-    <p>
-      Whitelister allows you to simultaneously filter <i>and</i> validate a wide range of data. For example, you can validate and filter:
-      <ul>
-        <li>a single value</li>
-        <li>an array, its properties, and its contents</li>
-        <li>an object and its key/value pairs</li>
-      </ul>
-      All code is happily hosted on <a href="https://github.com/SpireTeam/whitelister">Github</a>, including <a href="https://github.com/SpireTeam/whitelister/blob/master/test/spec.js">tests</a>.
-    </p>
-    <p>Requires <a href="https://nodejs.org/en/">Node.js</a> 6 or higher.</p>
-    <h2 id="introduction">Introduction</h2>
-    <p>
+<p>
+  <img src="./assets/images/whitelister_logo.png" srcset="./assets/images/whitelister_logo.png 2x" alt="Spire Labs" class="img-fluid main-logo"/>
+</p>
+<p class="text-muted">Simple, basic filtering and validation tool for Node.js.</p>
+<p>
+  Whitelister allows you to simultaneously filter <i>and</i> validate a wide range of data via its default <code>Promise</code> interface or using its <code>.sync</code> method. For example, you can validate and filter:
+  <ul>
+    <li>a single value</li>
+    <li>an array, its properties, and its contents</li>
+    <li>an object and its key/value pairs</li>
+  </ul>
+  All code is happily hosted on <a href="https://github.com/SpireTeam/whitelister">Github</a>, including <a href="https://github.com/SpireTeam/whitelister/blob/master/test/spec.js">tests</a>.
+</p>
+<p>Requires <a href="https://nodejs.org/en/">Node.js</a> 6 or higher.</p>
+<h2 id="introduction">Introduction</h2>
+<p>
       The most common way to use whitelister is to validate and filter incoming parameters.
 
       {% highlight js %}
@@ -26,7 +28,7 @@ const params = {
   admin: true,
 };
 
-const filteredParams = whitelister(rules, params);
+return whitelister(rules, params);
 // => { username: 'david', email: 'david@spirelabs.co' }
       {% endhighlight %}
 
@@ -50,7 +52,7 @@ const params = {
   ],
 };
 
-const response = whitelister(rules, params);
+return whitelister(rules, params);
 // => [{ id: 1, username: 'david' }, { id: 2, username: 'rob' }]
       {% endhighlight %}
 
@@ -72,7 +74,10 @@ const params = {
   user: { email: 'david@spirelabs.co' },
 };
 
-return Promise.try(() => whitelister(rules, params));
-// => throws WhitelistError user[password] is required
+return whitelister(rules, params)
+.catch((e) => {
+  console.log(e);
+  // => WhitelistError { errors: [{ field: 'password', message: 'is required' }], message: 'password is required'}
+});
       {% endhighlight %}
-    </p>
+</p>

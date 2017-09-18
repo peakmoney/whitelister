@@ -1,0 +1,36 @@
+- type: BaseError
+  description: A base error that all other Whitelister errors inherit from. Doing so allows all Whitelister errors to be caught at a single point.
+
+- type: ArgumentError
+  subtitle: Inherits from <a href="#errors-BaseError"><code>BaseError</code></a>
+  description: Thrown when the arguments provided to Whitelister are not acceptable.
+  example: |
+    const rules = ['integer'];
+    const params = { per_page: 25 };
+    return whitelister(rules, params);
+    // => ArgumentError { message: 'rules is not an object or string' }
+
+- type: FieldError
+  subtitle: Inherits from <a href="#errors-BaseError"><code>BaseError</code></a>
+  description: Thrown when a validation fails or a rule cannot be met and collected to root <a href="#errors-WhitelistError"><code>WhitelistError</code></a>.
+  example: |
+    const rules = {
+      page: { type: 'integer', required: true },
+      per_page: { type: 'integer', default: 100 },
+    };
+    const params = { per_page: 25 };
+    return whitelister(rules, params);
+    // => FieldError { field: 'page', message: 'is required' }
+
+- type: WhitelistError
+  subtitle: Inherits from <a href="#errors-BaseError"><code>BaseError</code></a>
+  description: Thrown when overall whitelisting fails. Aggregates <code>FieldError</code>s and nested <code>WhitelistError</code>s into its <code>errors</code> property.
+  example: |
+    const rules = {
+      user_id: { type: 'integer', required: true },
+      page: { type: 'integer', required: true },
+      per_page: { type: 'integer', default: 100 },
+    };
+    const params = { per_page: 25 };
+    return whitelister(rules, params);
+    // => WhitelistError { errors: [{ field: 'page', message: 'is required' }, { field: 'user_id', message: 'is required' }], message: 'page is required; user_id is required' }

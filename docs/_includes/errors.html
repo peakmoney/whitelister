@@ -1,0 +1,20 @@
+<h2 id="errors">Errors</h2>
+
+<p>
+  Blah blah.
+</p>
+
+{% for err in site.data.errors %}
+<div class="card mb-3" id="errors-{{ err.type }}">
+  <div class="card-body">
+    <h4 class="card-title">{{ err.type }}</h4>
+    <h6 class="card-subtitle mb-2 text-muted">{{ err.subtitle }}</h6>
+    <p class="card-text">{{ err.description }}</p>
+{%- if err.example -%}
+{% highlight js %}
+{{ err.example }}
+{% endhighlight %}
+{%- endif -%}
+  </div>
+</div>
+{% endfor %}
