@@ -1,13 +1,19 @@
 {
   "name": "whitelister",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple, basic filtering and validation tool for Node.js.",
   "main": "whitelister.js",
-  "repository": "git@github.com:SpireTeam/whitelister",
+  "repository": {
+    "url": "https://github.com/SpireTeam/whitelister",
+    "type": "git"
+  },
   "scripts": {
     "test": "NODE_ENV=test mocha --require mocha-clean --timeout=10000",
     "lint": "eslint ."
   },
+  "keywords": ["parameters", "params", "whitelist", "validation", "validation-library", "whitelist-validation", "whitelisting-filter"],
+  "homepage": "https://spireteam.github.io/whitelister/",
+  "bugs": "https://github.com/SpireTeam/whitelister/issues",
   "contributors": [
     {
       "name": "Rob Scott",
@@ -18,7 +24,11 @@
       "url": "https://github.com/davidpaulhunt"
     }
   ],
-  "license": "UNLICENSED",
+  "files": [
+    "whitelister.js",
+    "lib/*.js"
+  ],
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^7.2.3",

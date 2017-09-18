@@ -1,4 +1,4 @@
-# whitelister
+# Whitelister
 
 Simple, basic filtering and validation tool for Node.js.
 
@@ -20,8 +20,14 @@ const rules = {
 
 const params = { q: 'hello' };
 
-const filteredParams = whitelister(rules, params);
+return whitelister(rules, params);
 // => { page: 1, per_page: 20, q: 'hello' };
 ```
 
-You can find the full documentation on the website: https://spireteam.github.io/whitelister/
+## Documentation
+
+You can find the full documentation on the website: [https://spireteam.github.io/whitelister/](https://spireteam.github.io/whitelister/)
+
+## License
+
+MIT
