@@ -1,6 +1,6 @@
 # Whitelister
 
-Simple, basic filtering and validation tool for Node.js.
+Simple, **dependency-free** filtering and validation tool for Node.js.
 
 ## Quick Start
 
