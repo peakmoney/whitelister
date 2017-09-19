@@ -22,6 +22,7 @@
   ],
   "homepage": "https://spireteam.github.io/whitelister/",
   "bugs": "https://github.com/SpireTeam/whitelister/issues",
+  "author": "David Hunt <david@spirelabs.co> (https://github.com/davidpaulhunt)",
   "contributors": [
     {
       "name": "David Hunt",
