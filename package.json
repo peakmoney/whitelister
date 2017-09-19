@@ -24,12 +24,12 @@
   "bugs": "https://github.com/SpireTeam/whitelister/issues",
   "contributors": [
     {
-      "name": "Rob Scott",
-      "url": "https://github.com/robscott"
-    },
-    {
       "name": "David Hunt",
       "url": "https://github.com/davidpaulhunt"
+    },
+    {
+      "name": "Rob Scott",
+      "url": "https://github.com/robscott"
     }
   ],
   "files": [
