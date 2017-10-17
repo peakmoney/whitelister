@@ -31,3 +31,9 @@ You can find the full documentation on the website: [https://spireteam.github.io
 ## License
 
 MIT
+
+## Changelog
+
+### v0.0.4
+#### Oct. 16, 2017
+* Ensure that `type` is treated like other `attributes`

@@ -710,6 +710,27 @@ describe('Whitelister (asynchronous)', () => {
           done();
         });
     });
+
+    it('should treat "type" like other attributes', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            name: { type: 'string' },
+            type: { type: 'string' },
+          },
+        },
+      };
+
+      const params = { user: { name: 'Bob', type: 'admin' } };
+      expect(whitelister(rules, params)).to.eventually.be.fulfilled
+        .then((response) => {
+          expect(response).to.be.an('object').that.has.property('user');
+          expect(response.user).to.have.property('name', 'Bob');
+          expect(response.user).to.have.property('type', 'admin');
+          done();
+        });
+    });
   });
 
   describe('rule: allowNull', () => {

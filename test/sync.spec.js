@@ -430,6 +430,26 @@ describe('Whitelister (synchronous)', () => {
       expect(response).to.be.an('object').that.has.property('user').that.has.property('name', 'Bob');
       done();
     });
+
+    it('should treat "type" like other attributes', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            name: { type: 'string' },
+            type: { type: 'string' },
+          },
+        },
+      };
+
+      const params = { user: { name: 'Bob', type: 'admin' } };
+      const response = whitelister.sync(rules, params);
+
+      expect(response).to.be.an('object').that.has.property('user');
+      expect(response.user).to.have.property('name', 'Bob');
+      expect(response.user).to.have.property('type', 'admin');
+      done();
+    });
   });
 
   describe('rule: allowNull', () => {
