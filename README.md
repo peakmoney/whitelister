@@ -2,6 +2,8 @@
 
 Simple, **dependency-free** filtering and validation tool for Node.js.
 
+[![Build Status](https://travis-ci.org/SpireTeam/whitelister.svg?branch=master)](https://travis-ci.org/SpireTeam/whitelister)
+
 ## Quick Start
 
 Using npm:
