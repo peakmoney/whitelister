@@ -36,6 +36,11 @@ MIT
 
 ## Changelog
 
+### v0.0.5
+#### Oct. 25, 2017
+* Ignore non-required properties with `undefined` values
+* Treat external errors differently than internal errors
+
 ### v0.0.4
 #### Oct. 16, 2017
 * Ensure that `type` is treated like other `attributes`
