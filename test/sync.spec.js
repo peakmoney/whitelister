@@ -518,7 +518,7 @@ describe('Whitelister (synchronous)', () => {
       done();
     });
 
-    it('should throw an error for a long form custom filter', (done) => {
+    it('should accept and use a long form custom filter', (done) => {
       const rules = {
         user: {
           type: 'object',
@@ -534,6 +534,46 @@ describe('Whitelister (synchronous)', () => {
       const response = whitelister.sync(rules, params);
       expect(response).to.have.property('user')
         .that.has.property('id', 100);
+      done();
+    });
+
+    it('should not apply a custom filter if the value is undefined', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: { type: 'integer', required: true, min: 1 },
+            name: {
+              type: 'string',
+              filterWith: val => val.length > 0,
+            },
+          },
+        },
+      };
+      const params = { user: { id: 100, name: undefined } };
+      const response = whitelister.sync(rules, params);
+      expect(response).to.have.property('user');
+      expect(response.user).to.have.property('id', 100);
+      expect(response.user).not.to.have.property('name');
+      done();
+    });
+
+    it('should not treat non-custom errors like custom errors', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            name: {
+              type: 'string',
+              filterWith: () => {
+                throw new Error('I AM NOT A CUSTOM ERROR');
+              },
+            },
+          },
+        },
+      };
+      const params = { user: { name: 'Chester' } };
+      expect(() => whitelister.sync(rules, params)).to.throw(WhitelistError, 'I AM NOT A CUSTOM ERROR');
       done();
     });
   });

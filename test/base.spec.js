@@ -824,7 +824,7 @@ describe('Whitelister (asynchronous)', () => {
         });
     });
 
-    it('accept and use a long form custom filter', (done) => {
+    it('should accept and use a long form custom filter', (done) => {
       const rules = {
         user: {
           type: 'object',
@@ -840,6 +840,53 @@ describe('Whitelister (asynchronous)', () => {
       expect(whitelister(rules, params)).to.eventually.be.fulfilled
         .then((response) => {
           expect(response).to.have.property('user').that.has.property('id', 100);
+          done();
+        });
+    });
+
+    it('should not apply a custom filter if the value is undefined', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            id: { type: 'integer', required: true, min: 1 },
+            name: {
+              type: 'string',
+              filterWith: val => val.length > 0,
+            },
+          },
+        },
+      };
+      const params = { user: { id: 100, name: undefined } };
+      expect(whitelister(rules, params)).to.eventually.be.fulfilled
+        .then((response) => {
+          expect(response).to.have.property('user');
+          expect(response.user).to.have.property('id', 100);
+          expect(response.user).not.to.have.property('name');
+          done();
+        });
+    });
+
+    it('should not treat non-custom errors like custom errors', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            name: {
+              type: 'string',
+              filterWith: () => {
+                throw new Error('I AM NOT A CUSTOM ERROR');
+              },
+            },
+          },
+        },
+      };
+      const params = { user: { name: 'Chester' } };
+      expect(whitelister(rules, params)).to.eventually.be.rejectedWith(WhitelistError)
+        .then((response) => {
+          expect(response).to.be.an.instanceof(WhitelistError)
+            .that.has.property('message', 'I AM NOT A CUSTOM ERROR');
+
           done();
         });
     });
