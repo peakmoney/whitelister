@@ -57,7 +57,7 @@
     const rules = {
       date: {
         type: 'string',
-        filterWith: (val) => {
+        filterWith: (val, propertyName) => {
           if (val) {
             return moment(val).isBefore(moment(), 'day');
           }
@@ -74,7 +74,7 @@
     const rules = {
       state: {
         type: 'integer',
-        preTransform: (val) => {
+        preTransform: (val, propertyName) => {
           if (typeof val === 'string') {
             return states[val];
           }
@@ -91,7 +91,7 @@
     const rules = {
       date: {
         type: 'string',
-        postTransform: val => moment(val).format('ggggww'),
+        postTransform: (val, propertyName) => moment(val).format('ggggww'),
       },
     };
   types: all
