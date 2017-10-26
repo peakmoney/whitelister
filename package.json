@@ -8,6 +8,10 @@
     "type": "git"
   },
   "scripts": {
+    "build": "yarn run build:main && yarn run build:min",
+    "build:main": "./node_modules/.bin/webpack --config webpack.config.js",
+    "build:min": "./node_modules/.bin/webpack --config webpack.min.js",
+    "prepublish": "yarn run test && yarn run build",
     "test": "NODE_ENV=test mocha --require mocha-clean --timeout=10000",
     "lint": "eslint ."
   },
@@ -50,6 +54,20 @@
     "eslint-plugin-react": "^7.2.1",
     "express": "^4.15.4",
     "mocha": "^2.4.5",
-    "mocha-clean": "^1.0.0"
+    "mocha-clean": "^1.0.0",
+    "webpack": "^3.8.1"
+  },
+  "testling": {
+    "files": "test/*.spec.js",
+    "browsers": [
+      "ie/6..latest",
+      "chrome/22..latest",
+      "firefox/16..latest",
+      "safari/latest",
+      "opera/11.0..latest",
+      "iphone/6",
+      "ipad/6",
+      "android-browser/latest"
+    ]
   }
 }
