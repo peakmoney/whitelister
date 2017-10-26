@@ -892,7 +892,50 @@ describe('Whitelister (asynchronous)', () => {
     });
   });
 
-  describe('Value transformations', () => {
+  describe('Pre transformations', () => {
+    it('should substitute slug for id', (done) => {
+      const rules = {
+        slug: {
+          type: 'string',
+          preTransform: val => `user_${val}`,
+        },
+      };
+      const params = { slug: 100 };
+      expect(whitelister(rules, params)).to.eventually.be.fulfilled
+        .then((response) => {
+          expect(response).to.have.property('slug', 'user_100');
+          done();
+        });
+    });
+
+    it('should pass property value and name to preTransform', (done) => {
+      const rules = {
+        birth_date: {
+          type: 'string',
+          preTransform: (val, key) => {
+            if (/date/.test(key)) {
+              return new Date(val);
+            }
+            return val;
+          },
+          filterWith: (val, key) => {
+            if (/date/.test(key)) return val < new Date();
+
+            return true;
+          },
+        },
+      };
+      const params = { birth_date: '2000-10-31' };
+      expect(whitelister(rules, params)).to.eventually.be.fulfilled
+        .then((response) => {
+          expect(response).to.have.property('birth_date')
+            .that.is.a('date');
+          done();
+        });
+    });
+  });
+
+  describe('Post transformations', () => {
     it('should return value / 2', (done) => {
       const rules = {
         user_id: {
@@ -904,6 +947,25 @@ describe('Whitelister (asynchronous)', () => {
       expect(whitelister(rules, params)).to.eventually.be.fulfilled
         .then((response) => {
           expect(response).to.have.property('user_id', 50);
+          done();
+        });
+    });
+
+    it('should pass property value and name to postTransform', (done) => {
+      const rules = {
+        league_id: {
+          type: 'integer',
+          postTransform: (val, key) => {
+            if (/league/.test(key)) return `league_${val}`;
+
+            return `user_${val}`;
+          },
+        },
+      };
+      const params = { league_id: 100 };
+      expect(whitelister(rules, params)).to.eventually.be.fulfilled
+        .then((response) => {
+          expect(response).to.have.property('league_id', 'league_100');
           done();
         });
     });

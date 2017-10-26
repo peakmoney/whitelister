@@ -576,9 +576,91 @@ describe('Whitelister (synchronous)', () => {
       expect(() => whitelister.sync(rules, params)).to.throw(WhitelistError, 'I AM NOT A CUSTOM ERROR');
       done();
     });
+
+    it('should provide the property name as a second argument when specifying type', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            slug: {
+              type: 'string',
+              filterWith: (val, key) => {
+                if (val === 'reserved_word') {
+                  throw new Error(`${key}: ${val} is not allowed`);
+                }
+                return true;
+              },
+            },
+          },
+        },
+      };
+      const params = { user: { slug: 'reserved_word' } };
+      expect(() => whitelister.sync(rules, params)).to.throw(WhitelistError, 'user[slug]: reserved_word is not allowed');
+      done();
+    });
+
+    it('should provide the property name as a second argument without specifying type', (done) => {
+      const rules = {
+        user: {
+          type: 'object',
+          attributes: {
+            slug: {
+              filterWith: (val, key) => {
+                if (val === 'reserved_word') {
+                  throw new Error(`${key}: ${val} is not allowed`);
+                }
+                return true;
+              },
+            },
+          },
+        },
+      };
+      const params = { user: { slug: 'reserved_word' } };
+      expect(() => whitelister.sync(rules, params)).to.throw(WhitelistError, 'user[slug]: reserved_word is not allowed');
+      done();
+    });
   });
 
-  describe('Value transformations', () => {
+  describe('Pre transformations', () => {
+    it('should substitute slug for id', (done) => {
+      const rules = {
+        slug: {
+          type: 'string',
+          preTransform: val => `user_${val}`,
+        },
+      };
+      const params = { slug: 100 };
+      const response = whitelister.sync(rules, params);
+      expect(response).to.have.property('slug', 'user_100');
+      done();
+    });
+
+    it('should pass property value and name to preTransform', (done) => {
+      const rules = {
+        birth_date: {
+          type: 'string',
+          preTransform: (val, key) => {
+            if (/date/.test(key)) {
+              return new Date(val);
+            }
+            return val;
+          },
+          filterWith: (val, key) => {
+            if (/date/.test(key)) return val < new Date();
+
+            return true;
+          },
+        },
+      };
+      const params = { birth_date: '2000-10-31' };
+      const response = whitelister.sync(rules, params);
+      expect(response).to.have.property('birth_date')
+        .that.is.a('date');
+      done();
+    });
+  });
+
+  describe('Post transformations', () => {
     it('should return value / 2', (done) => {
       const rules = {
         user_id: {
@@ -589,6 +671,23 @@ describe('Whitelister (synchronous)', () => {
       const params = { user_id: 100 };
       const response = whitelister.sync(rules, params);
       expect(response).to.have.property('user_id', 50);
+      done();
+    });
+
+    it('should pass property value and name to postTransform', (done) => {
+      const rules = {
+        league_id: {
+          type: 'integer',
+          postTransform: (val, key) => {
+            if (/league/.test(key)) return `league_${val}`;
+
+            return `user_${val}`;
+          },
+        },
+      };
+      const params = { league_id: 100 };
+      const response = whitelister.sync(rules, params);
+      expect(response).to.have.property('league_id', 'league_100');
       done();
     });
   });
