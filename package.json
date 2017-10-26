@@ -1,6 +1,6 @@
 {
   "name": "whitelister",
-  "version": "0.0.5",
+  "version": "0.1.0-beta",
   "description": "Simple, basic filtering and validation tool for Node.js.",
   "main": "./whitelister.js",
   "repository": {
