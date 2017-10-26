@@ -2,7 +2,7 @@
   "name": "whitelister",
   "version": "0.0.5",
   "description": "Simple, basic filtering and validation tool for Node.js.",
-  "main": "whitelister.js",
+  "main": "./whitelister.js",
   "repository": {
     "url": "https://github.com/SpireTeam/whitelister",
     "type": "git"
@@ -39,12 +39,16 @@
   ],
   "files": [
     "whitelister.js",
+    "dist/*.js",
     "lib/*.js"
   ],
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^7.1.1",
     "eslint": "^4.4.1",
@@ -56,18 +60,5 @@
     "mocha": "^2.4.5",
     "mocha-clean": "^1.0.0",
     "webpack": "^3.8.1"
-  },
-  "testling": {
-    "files": "test/*.spec.js",
-    "browsers": [
-      "ie/6..latest",
-      "chrome/22..latest",
-      "firefox/16..latest",
-      "safari/latest",
-      "opera/11.0..latest",
-      "iphone/6",
-      "ipad/6",
-      "android-browser/latest"
-    ]
   }
 }

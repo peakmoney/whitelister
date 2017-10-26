@@ -77,159 +77,251 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { isFunc } = __webpack_require__(1);
+"use strict";
 
-module.exports.BaseError = class extends Error {
-  constructor(msg = '') {
-    super();
-    this.name = 'BaseError';
-    this.message = msg;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _require = __webpack_require__(1),
+    isFunc = _require.isFunc;
+
+module.exports.BaseError = function (_Error) {
+  _inherits(_class, _Error);
+
+  function _class() {
+    var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+    _classCallCheck(this, _class);
+
+    var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this));
+
+    _this.name = 'BaseError';
+    _this.message = msg;
+    return _this;
   }
 
-  toJSON() {
-    return {
-      message: this.message,
-    };
-  }
-};
+  _createClass(_class, [{
+    key: 'toJSON',
+    value: function toJSON() {
+      return {
+        message: this.message
+      };
+    }
+  }]);
 
-module.exports.ArgumentError = class extends module.exports.BaseError {
-  constructor(name, msg = '') {
-    super();
-    this.name = 'ArgumentError';
-    const ending = msg.length > 0 ? ` ${msg}` : '';
-    this.message = `${name}${ending}`;
-  }
-};
+  return _class;
+}(Error);
 
-module.exports.FieldError = class extends module.exports.BaseError {
-  constructor(field, message = 'is invalid') {
-    super();
-    this.name = 'FieldError';
-    this.field = field;
-    this.message = message;
-  }
+module.exports.ArgumentError = function (_module$exports$BaseE) {
+  _inherits(_class2, _module$exports$BaseE);
 
-  toString() {
-    return `${this.field} ${this.message}`;
+  function _class2(name) {
+    var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+    _classCallCheck(this, _class2);
+
+    var _this2 = _possibleConstructorReturn(this, (_class2.__proto__ || Object.getPrototypeOf(_class2)).call(this));
+
+    _this2.name = 'ArgumentError';
+    var ending = msg.length > 0 ? ' ' + msg : '';
+    _this2.message = '' + name + ending;
+    return _this2;
   }
 
-  toJSON() {
-    return {
-      field: this.field,
-      message: this.message,
-    };
-  }
-};
+  return _class2;
+}(module.exports.BaseError);
 
-module.exports.WhitelistError = class extends module.exports.BaseError {
-  constructor(fieldErrors = []) {
-    super();
-    this.name = 'WhitelistError';
-    this.errors = [];
-    this.message = '';
-    fieldErrors.forEach((err) => {
+module.exports.FieldError = function (_module$exports$BaseE2) {
+  _inherits(_class3, _module$exports$BaseE2);
+
+  function _class3(field) {
+    var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'is invalid';
+
+    _classCallCheck(this, _class3);
+
+    var _this3 = _possibleConstructorReturn(this, (_class3.__proto__ || Object.getPrototypeOf(_class3)).call(this));
+
+    _this3.name = 'FieldError';
+    _this3.field = field;
+    _this3.message = message;
+    return _this3;
+  }
+
+  _createClass(_class3, [{
+    key: 'toString',
+    value: function toString() {
+      return this.field + ' ' + this.message;
+    }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      return {
+        field: this.field,
+        message: this.message
+      };
+    }
+  }]);
+
+  return _class3;
+}(module.exports.BaseError);
+
+module.exports.WhitelistError = function (_module$exports$BaseE3) {
+  _inherits(_class4, _module$exports$BaseE3);
+
+  function _class4() {
+    var fieldErrors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+    _classCallCheck(this, _class4);
+
+    var _this4 = _possibleConstructorReturn(this, (_class4.__proto__ || Object.getPrototypeOf(_class4)).call(this));
+
+    _this4.name = 'WhitelistError';
+    _this4.errors = [];
+    _this4.message = '';
+    fieldErrors.forEach(function (err) {
       if (err instanceof module.exports.WhitelistError) {
-        err.errors.forEach((e) => {
-          this.errors.push(e);
+        err.errors.forEach(function (e) {
+          _this4.errors.push(e);
         });
-        this.addToMessage(err.message);
+        _this4.addToMessage(err.message);
       } else if (isFunc(err.toJSON)) {
-        this.errors.push(err.toJSON());
-        this.addToMessage(err.toString());
+        _this4.errors.push(err.toJSON());
+        _this4.addToMessage(err.toString());
       } else {
-        this.errors.push({
-          message: err.toString(),
+        _this4.errors.push({
+          message: err.toString()
         });
-        this.addToMessage(err.message || err.toString());
+        _this4.addToMessage(err.message || err.toString());
       }
     });
+    return _this4;
   }
 
-  addToMessage(msg) {
-    if (this.message.length > 0) {
-      this.message = `${this.message}, ${msg}`;
-    } else {
-      this.message = msg;
+  _createClass(_class4, [{
+    key: 'addToMessage',
+    value: function addToMessage(msg) {
+      if (this.message.length > 0) {
+        this.message = this.message + ', ' + msg;
+      } else {
+        this.message = msg;
+      }
     }
-  }
+  }, {
+    key: 'toJSON',
+    value: function toJSON() {
+      return {
+        message: this.message,
+        errors: this.errors
+      };
+    }
+  }]);
 
-  toJSON() {
-    return {
-      message: this.message,
-      errors: this.errors,
-    };
-  }
-};
-
+  return _class4;
+}(module.exports.BaseError);
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-const toString = Object.prototype.toString;
+"use strict";
 
-const has = Object.prototype.hasOwnProperty;
 
-const isDefined = obj => typeof obj !== 'undefined';
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-const isFunc = obj => toString.call(obj) === '[object Function]';
+var toString = Object.prototype.toString;
 
-const isString = obj => toString.call(obj) === '[object String]';
+var has = Object.prototype.hasOwnProperty;
 
-const isObject = obj => toString.call(obj) === '[object Object]';
+var isDefined = function isDefined(obj) {
+  return typeof obj !== 'undefined';
+};
 
-const isNil = obj => !isDefined(obj) || obj === null;
+var isFunc = function isFunc(obj) {
+  return toString.call(obj) === '[object Function]';
+};
 
-const includesOneOf = (expected, given) => {
-  const [base, target] = expected.length < given.length ? [expected, given] : [given, expected];
-  return base.some(val => target.includes(val));
+var isString = function isString(obj) {
+  return toString.call(obj) === '[object String]';
+};
+
+var isObject = function isObject(obj) {
+  return toString.call(obj) === '[object Object]';
+};
+
+var isNil = function isNil(obj) {
+  return !isDefined(obj) || obj === null;
+};
+
+var includesOneOf = function includesOneOf(expected, given) {
+  var _ref = expected.length < given.length ? [expected, given] : [given, expected],
+      _ref2 = _slicedToArray(_ref, 2),
+      base = _ref2[0],
+      target = _ref2[1];
+
+  return base.some(function (val) {
+    return target.includes(val);
+  });
 };
 
 module.exports = {
-  has,
-  includesOneOf,
-  isDefined,
-  isFunc,
-  isNil,
-  isObject,
-  isString,
+  has: has,
+  includesOneOf: includesOneOf,
+  isDefined: isDefined,
+  isFunc: isFunc,
+  isNil: isNil,
+  isObject: isObject,
+  isString: isString
 };
-
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 module.exports = __webpack_require__(3);
 module.exports.errors = __webpack_require__(0);
-
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { ArgumentError, FieldError, WhitelistError } = __webpack_require__(0);
-const {
-  has,
-  includesOneOf,
-  isDefined,
-  isFunc,
-  isNil,
-  isObject,
-  isString,
-} = __webpack_require__(1);
+"use strict";
 
-const filters = {
+
+var _require = __webpack_require__(0),
+    ArgumentError = _require.ArgumentError,
+    FieldError = _require.FieldError,
+    WhitelistError = _require.WhitelistError;
+
+var _require2 = __webpack_require__(1),
+    has = _require2.has,
+    includesOneOf = _require2.includesOneOf,
+    isDefined = _require2.isDefined,
+    isFunc = _require2.isFunc,
+    isNil = _require2.isNil,
+    isObject = _require2.isObject,
+    isString = _require2.isString;
+
+var filters = {
   config: {
-    nestedNames: true,
+    nestedNames: true
   },
 
-  setConfig: (opts = {}) => {
+  setConfig: function setConfig() {
+    var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
     if (isDefined(opts.nestedNames)) {
       filters.config.nestedNames = opts.nestedNames;
     }
-  },
+  }
 };
 
 filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
@@ -237,9 +329,9 @@ filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
     throw new ArgumentError('rules', 'is not an object or string');
   }
 
-  const errors = [];
+  var errors = [];
 
-  const done = function done(response) {
+  var done = function done(response) {
     if (errors.length > 0) {
       throw new WhitelistError(errors);
     }
@@ -247,13 +339,15 @@ filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
     return response;
   };
 
-  function filterByType(type, opts, target, parentName = '') {
+  function filterByType(type, opts, target) {
+    var parentName = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+
     if (!has.call(filters, type)) {
-      throw new ArgumentError(`${parentName}.${type}`, 'is invalid');
+      throw new ArgumentError(parentName + '.' + type, 'is invalid');
     }
 
-    const filter = filters[type];
-    let response;
+    var filter = filters[type];
+    var response = void 0;
     try {
       response = filter(opts, target, parentName);
     } catch (error) {
@@ -269,15 +363,14 @@ filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
 
   if (isFunc(rules)) {
     if (!rules(params)) {
-      throw new FieldError(`${parent || 'value'}`, 'is invalid');
+      throw new FieldError('' + (parent || 'value'), 'is invalid');
     }
     return params;
   }
 
   if (has.call(rules, 'type') && !areAttributes) {
-    const val = (has.call(rules, 'preTransform') && isFunc(rules.preTransform)) ?
-      rules.preTransform(params) : params;
-    let response;
+    var val = has.call(rules, 'preTransform') && isFunc(rules.preTransform) ? rules.preTransform(params) : params;
+    var response = void 0;
     try {
       response = filterByType(rules.type, rules, val, parent);
     } catch (error) {
@@ -287,12 +380,12 @@ filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
     return done(response);
   }
 
-  const filteredParams = {};
-  Object.keys(rules).forEach((name) => {
-    const rule = rules[name] || {};
-    const properName = (filters.config.nestedNames && parent) ? `${parent}[${name}]` : name;
+  var filteredParams = {};
+  Object.keys(rules).forEach(function (name) {
+    var rule = rules[name] || {};
+    var properName = filters.config.nestedNames && parent ? parent + '[' + name + ']' : name;
 
-    let val;
+    var val = void 0;
     try {
       if (isString(rule) && has.call(params, name)) {
         val = params[name];
@@ -310,7 +403,7 @@ filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
         } else if (isNil(val) && rule.required) {
           throw new FieldError(properName, 'is required');
         } else if (!has.call(filters, rule.type) && !isFunc(rule.filterWith)) {
-          throw new ArgumentError(`${properName}.type`, 'is invalid');
+          throw new ArgumentError(properName + '.type', 'is invalid');
         } else {
           if (has.call(rule, 'preTransform') && isFunc(rule.preTransform)) {
             val = rule.preTransform(val, properName);
@@ -322,18 +415,18 @@ filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
             throw new FieldError(properName, 'is invalid');
           }
 
-          const validValue = acceptedValues =>
-            acceptedValues.some((acceptedValue) => {
+          var validValue = function validValue(acceptedValues) {
+            return acceptedValues.some(function (acceptedValue) {
               if (typeof acceptedValue === 'function') return acceptedValue(val);
               return acceptedValue === val;
             });
+          };
 
           if (Array.isArray(rule.acceptedValues) && !validValue(rule.acceptedValues)) {
-            throw new FieldError(properName, `must be one of ${rule.acceptedValues.join(', ')}`);
+            throw new FieldError(properName, 'must be one of ' + rule.acceptedValues.join(', '));
           }
 
-          filteredParams[name] = (has.call(rule, 'postTransform') && isFunc(rule.postTransform)) ?
-            rule.postTransform(val, properName) : val;
+          filteredParams[name] = has.call(rule, 'postTransform') && isFunc(rule.postTransform) ? rule.postTransform(val, properName) : val;
         }
       } else if (isDefined(rule.default)) {
         filteredParams[name] = rule.default;
@@ -349,31 +442,35 @@ filters.byRules = function filterByRules(rules, params, parent, areAttributes) {
 };
 
 filters.array = function filterArray(rules, target, parentName) {
-  const val = isString(target) ? target.split(',').map(t => t.trim()) : target;
+  var val = isString(target) ? target.split(',').map(function (t) {
+    return t.trim();
+  }) : target;
   if (isDefined(val) && !Array.isArray(val)) {
     throw new FieldError(parentName, 'is not an array');
   }
 
   if (isDefined(rules.minLength) && (!isDefined(val) || val.length < rules.minLength)) {
-    throw new FieldError(parentName, `has too few elements (min ${rules.minLength} elements)`);
+    throw new FieldError(parentName, 'has too few elements (min ' + rules.minLength + ' elements)');
   }
 
-  if (isDefined(rules.maxLength) && (isDefined(val) && val.length > rules.maxLength)) {
-    throw new FieldError(parentName, `has too many elements (max ${rules.maxLength} elements)`);
+  if (isDefined(rules.maxLength) && isDefined(val) && val.length > rules.maxLength) {
+    throw new FieldError(parentName, 'has too many elements (max ' + rules.maxLength + ' elements)');
   }
 
-  const rule = rules.attributes;
+  var rule = rules.attributes;
   if (isDefined(rule)) {
-    return val.map((child, i) => filters.byRules(rule, child, `${parentName}[${i}]`));
+    return val.map(function (child, i) {
+      return filters.byRules(rule, child, parentName + '[' + i + ']');
+    });
   }
   return val;
 };
 
 filters.boolean = function filterBoolean(rules, target, name) {
-  let val = target;
-  if (['true', '1', 't'].includes(`${val}`.toLowerCase())) {
+  var val = target;
+  if (['true', '1', 't'].includes(('' + val).toLowerCase())) {
     val = true;
-  } else if (['false', '0', 'f'].includes(`${val}`.toLowerCase())) {
+  } else if (['false', '0', 'f'].includes(('' + val).toLowerCase())) {
     val = false;
   } else if (isDefined(val)) {
     throw new FieldError(name, 'is not true or false');
@@ -382,7 +479,7 @@ filters.boolean = function filterBoolean(rules, target, name) {
 };
 
 filters.email = function filterEmail(rules, target, name) {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
 
   if (!re.test(target)) throw new FieldError(name, 'is not a valid email address');
 
@@ -397,7 +494,7 @@ filters.null = function filterNull(rules, target, name) {
 };
 
 filters.integer = function filterInteger(rules, target, name) {
-  let val = target;
+  var val = target;
   if (!Number.isInteger(val)) {
     val = parseInt(val, 10);
   }
@@ -405,20 +502,20 @@ filters.integer = function filterInteger(rules, target, name) {
     throw new FieldError(name, 'is not an integer');
   }
   if (isDefined(rules.max) && val > rules.max) {
-    throw new FieldError(name, `is too large (max ${rules.max})`);
+    throw new FieldError(name, 'is too large (max ' + rules.max + ')');
   } else if (isDefined(rules.min) && val < rules.min) {
-    throw new FieldError(name, `is too small (min ${rules.min})`);
+    throw new FieldError(name, 'is too small (min ' + rules.min + ')');
   }
   return val;
 };
 
 filters.float = function filterFloat(rules, target, name) {
-  const val = parseFloat(target, 10);
+  var val = parseFloat(target, 10);
   if (isNaN(val)) throw new FieldError(name, 'is not a float');
   if (isDefined(rules.max) && val > rules.max) {
-    throw new FieldError(name, `is too large (max ${rules.max})`);
+    throw new FieldError(name, 'is too large (max ' + rules.max + ')');
   } else if (isDefined(rules.min) && val < rules.min) {
-    throw new FieldError(name, `is too small (min ${rules.min})`);
+    throw new FieldError(name, 'is too small (min ' + rules.min + ')');
   }
   return val;
 };
@@ -432,14 +529,13 @@ filters.object = function filterObject(rules, target, parentName) {
     throw new FieldError(parentName, 'is not an object');
   }
 
-  if (Array.isArray(rules.requireOneOf)
-  && !includesOneOf(rules.requireOneOf, Object.keys(target))) {
-    const oneOf = rules.requireOneOf.join(', ');
-    throw new FieldError(parentName, `must include one of ${oneOf}`);
+  if (Array.isArray(rules.requireOneOf) && !includesOneOf(rules.requireOneOf, Object.keys(target))) {
+    var oneOf = rules.requireOneOf.join(', ');
+    throw new FieldError(parentName, 'must include one of ' + oneOf);
   }
 
   if (has.call(rules, 'attributes')) {
-    const name = filters.config.nestedNames ? parentName : '';
+    var name = filters.config.nestedNames ? parentName : '';
     return filters.byRules(rules.attributes, target, name, true);
   }
 
@@ -447,16 +543,16 @@ filters.object = function filterObject(rules, target, parentName) {
 };
 
 filters.string = function filterString(rules, target, name) {
-  let val;
+  var val = void 0;
   if (isDefined(target)) {
     if (!isString(target)) {
       throw new FieldError(name, 'is not a string');
     }
     val = target.toString();
     if (rules.minLength && val.trim().length < rules.minLength) {
-      throw new FieldError(name, `is too short (min ${rules.minLength} characters)`);
+      throw new FieldError(name, 'is too short (min ' + rules.minLength + ' characters)');
     } else if (rules.maxLength && val.trim().length > rules.maxLength) {
-      throw new FieldError(name, `is too long (max ${rules.maxLength} characters)`);
+      throw new FieldError(name, 'is too long (max ' + rules.maxLength + ' characters)');
     }
     return val;
   }
@@ -464,10 +560,10 @@ filters.string = function filterString(rules, target, name) {
   return val;
 };
 
-module.exports = (rules, target) => {
-  return new Promise((resolve, reject) => {
-    let error;
-    let response;
+module.exports = function (rules, target) {
+  return new Promise(function (resolve, reject) {
+    var error = void 0;
+    var response = void 0;
     try {
       response = filters.byRules(rules, target);
     } catch (err) {
@@ -481,12 +577,15 @@ module.exports = (rules, target) => {
   });
 };
 
-module.exports.sync = (rules, target) => filters.byRules(rules, target);
-
-module.exports.setConfig = (opts = {}) => {
-  filters.setConfig(opts);
+module.exports.sync = function (rules, target) {
+  return filters.byRules(rules, target);
 };
 
+module.exports.setConfig = function () {
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  filters.setConfig(opts);
+};
 
 /***/ })
 /******/ ]);
