@@ -1,16 +1,21 @@
 # Whitelister
 
-Simple, **dependency-free** filtering and validation tool for Node.js.
+Simple, **dependency-free** filtering and validation tool for Node.js and the browser.
 
 [![Build Status](https://travis-ci.org/SpireTeam/whitelister.svg?branch=master)](https://travis-ci.org/SpireTeam/whitelister)
 
 ## Quick Start
 
+#### Node.js
+
+Using yarn:
+
+`yarn add whitelister@latest`
+
 Using npm:
 
-`npm i --save whitelister`
+`npm i --save whitelister@latest`
 
-In Node.js
 ```js
 const whitelister = require('whitelister');
 
@@ -24,6 +29,26 @@ const params = { q: 'hello' };
 
 return whitelister(rules, params);
 // => { page: 1, per_page: 20, q: 'hello' };
+```
+
+#### Browser
+
+```html
+<script src="https://unpkg.com/whitelister@latest/dist/whitelister.js" />
+# or the minified version
+<script src="https://unpkg.com/whitelister@latest/dist/whitelister.min.js" />
+
+<script>
+  var rules = {
+    q: 'string',
+    page: { type: 'integer', min: 1, default: 1 },
+    per_page: { type: 'integer', min: 1, max: 100, default: 20 },
+  };
+
+  var params = { q: 'hello' };
+
+  var result = whitelister.sync(rules, params);
+</script>
 ```
 
 ## Documentation
