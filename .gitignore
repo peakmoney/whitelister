@@ -60,3 +60,6 @@ typings/
 .editorconfig
 
 /docs/_site
+
+# Don't commit distributions, those are for the node module only
+dist/

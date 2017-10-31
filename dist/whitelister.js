@@ -88,11 +88,36 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function _extendableBuiltin(cls) {
+  function ExtendableBuiltin() {
+    var instance = Reflect.construct(cls, Array.from(arguments));
+    Object.setPrototypeOf(instance, Object.getPrototypeOf(this));
+    return instance;
+  }
+
+  ExtendableBuiltin.prototype = Object.create(cls.prototype, {
+    constructor: {
+      value: cls,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+
+  if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(ExtendableBuiltin, cls);
+  } else {
+    ExtendableBuiltin.__proto__ = cls;
+  }
+
+  return ExtendableBuiltin;
+}
+
 var _require = __webpack_require__(1),
     isFunc = _require.isFunc;
 
-module.exports.BaseError = function (_Error) {
-  _inherits(_class, _Error);
+module.exports.BaseError = function (_extendableBuiltin2) {
+  _inherits(_class, _extendableBuiltin2);
 
   function _class() {
     var msg = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
@@ -116,7 +141,7 @@ module.exports.BaseError = function (_Error) {
   }]);
 
   return _class;
-}(Error);
+}(_extendableBuiltin(Error));
 
 module.exports.ArgumentError = function (_module$exports$BaseE) {
   _inherits(_class2, _module$exports$BaseE);
