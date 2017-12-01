@@ -1,4 +1,5 @@
 # .travis.yml
+dist: trusty
 language: node_js
 
 node_js:
@@ -7,3 +8,14 @@ node_js:
   - '6'
 
 cache: yarn
+
+addons:
+  sonarcloud:
+    organization: "davidpaulhunt-github"
+    token:
+      secure: "T4MpuBnAF90J4OJUcmelKU3vEmWZNmHbPi9bOAeG0VxYZ5zCkQBhi2Fi1lPumUOCfcLGX98IxxWa8ZvwORZ++Ri9tL1tyRVUXnTqJNqlHflvzqloSJrE/y1BgztrtjqXU/riPB+LqKkZvPDBiwxZX2xCPWMSDyeiktxsJOD9H2XzskGaG8vcAkklm5lwXLTb3Z0u7tXYeFmRfiR2s52sw4bOSOINFd3OyAtnW+USNkNgrw08Ch52Jp+2vzJqc1C23Cshr84BjfISEGNqppeW2p4N8Lqen27q+2c/9c+T+3XMVbAt/zDL8wq153G611WT4y1itpUu5r+ahDbD5s3ojaaB2aivviDb6LlrtPNCLoaHBcW0N/aeOGyoNqIdW6hDTKL0xREEONcId8DE+K3xvxnxBGzrSzMVhes52Pub6w+eJdCxnsAKxiemFhnSYssZ6xkwMH8UQ8P0/sWtyUZRZj/k8658nI3OldLl01aB4JebZwy9mqDScayrT843tU/iiPxxJRlKBovQ6MDiHraCmzO9b21tfYXMQ2B1LLcj8yQ7qc08TORxRLaZQiUoTghDBI9Yq5/mei00AnIue7CPMQ/DC8Al0xQTyRZbR0F2TK2SB1qOCS3lWWYLch4GzQubkuxG54V5fpOybDKbhEhsnBTQ042KgM6jTZR0rxUu+90="
+    branches:
+      - feature/bundle
+
+script:
+  - sonar-scanner
